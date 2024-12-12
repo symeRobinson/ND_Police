@@ -1,3 +1,20 @@
+Updated:
+
+fixes: the cuffs not working.
+removed: the cuffs in your inventory.
+
+updated: the ability to search people and take the items from their inventory.
+
+
+any problems
+DISCORD ME:  [https://discord.gg/VHDbgpnBbR]
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 <p  align="center">
     <a href="https://ndcore.dev" target="_blank">
         <img src="https://github.com/Testaross/ND_Police/assets/86536434/f8ab5177-c317-41f2-a35a-92d2a7b39ce5" width="40%" />
@@ -23,6 +40,15 @@
 
 Everything from ox_police has been completely rewritten besides `client/evidence.lua`, `client/spikes.lua`, and `client/escort.lua` which have minimal changes from the original ox_police.
 
+
+
+
+IMPORTANT!!
+[cuffs]
+
+make sure you go to server file then cuff.lua 
+line 7 and change your job to the one you want (I've got mine as police so just change that to what ever you have)
+
 ## Notes
 - Evidence lockers and armories are handled by ox_inventory.
 - If you're using NDCore you can create garages for police in `client/vehicle/data`.
@@ -36,28 +62,9 @@ If you want to PR a feature, you should ask first (so you won't waste time).
 
 **Hands up:**
 * Keybind that can be changed in the pause menu settings (default: X).
-* Click once to put hands up.
-* Hold for ~3 seconds to put hands up and kneel.
 * Click once to cancel.
-* search players when cuffed or hands up
+* search players when cuffed 
 
-**Cuffs/zipties:**
-* Unique zipties & cuffs props.
-* Unique zipties & cuff sounds for both applying and removing them.
-* Animation for normal cuffing & aggressive cuffing.
-* Normal cuffing occurs when a player has their hands up standing.
-* Aggressive cuffing occurs when the player has their hands up and kneeling, or when not having their hands up at all.
-* Cuffs can be used when hands are not up, zipties require player to have hands up.
-* Front & back cuff/ziptie animations for normal cuffing.
-* Aggressive cuffing will prompt the target player with a minigame; if they complete it, they cancel the cuffing animation and can run away.
-* Uncuffing requires `handcuffkey` items, and cutting zipties requires `tools` items, which is also used for hot-wiring in NDCore.
-
-**Escort/drag:**
-* Players can only be dragged when cuffed/ziptied.
-* Person dragging will play an animation holding the player being dragged.
-* Person being dragged will have their legs animated when the dragging player walks/runs.
-* Uncuffing/removing zipties will release the player from being dragged.
-* put player in vehicle
 
 **Evidence:**
 * Shooting will drop ammo casings on the ground around the player.
