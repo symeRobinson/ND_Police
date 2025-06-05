@@ -279,14 +279,14 @@ local function getAngle(ped, targetPed, pedCoords, targetPedCoords)
     return dotProduct > 0 and "front" or "back"
 end
 
-local function normalCuffPlayer(ped, targetPed, targetPlayer, cuffType, slot)
+local function normalCuffPlayer(ped, targetPed, targetPlayer, cuffType)
     local dict = "mp_arresting"
     local coords = GetEntityCoords(ped)
     local targetState = Player(targetPlayer).state
     if targetState.gettingCuffed or targetState.isCuffing or targetState.isCuffed then return end
 
     local angle = getAngle(ped, targetPed, coords, GetEntityCoords(targetPed))
-    TriggerServerEvent("ND_Police:syncNormalCuff", targetPlayer, angle, cuffType, slot)
+    TriggerServerEvent("ND_Police:syncNormalCuff", targetPlayer, angle, cuffType)
     Wait(100)
 
     lib.requestAnimDict(dict)
@@ -295,7 +295,7 @@ local function normalCuffPlayer(ped, targetPed, targetPlayer, cuffType, slot)
     ClearPedTasks(ped)
 end
 
-local function agressiveCuffPlayer(ped, targetPed, targetPlayer, cuffType, slot)
+local function agressiveCuffPlayer(ped, targetPed, targetPlayer, cuffType)
     local dict = "mp_arrest_paired"
     local coords = GetEntityCoords(ped)
     local heading = GetEntityHeading(ped)
@@ -305,7 +305,7 @@ local function agressiveCuffPlayer(ped, targetPed, targetPlayer, cuffType, slot)
     local playerState = Player(cache.serverId).state
     playerState:set("isCuffing", true, true)
 
-    TriggerServerEvent("ND_Police:syncAgressiveCuff", targetPlayer, "back", cuffType, slot, heading)
+    TriggerServerEvent("ND_Police:syncAgressiveCuff", targetPlayer, "back", cuffType, heading)
     Wait(100)
 
     lib.requestAnimDict(dict)
@@ -362,7 +362,7 @@ local function uncuffPed(ped, cuffType)
     StopEscortPlayer(serverId)
 end
 
-local function cuffPed(ped, cuffType, slot)
+local function cuffPed(ped, cuffType)
     if not ped or not DoesEntityExist(ped) then return end
 
     local allow, agressive = canCuffPed(ped, cuffType)
@@ -371,9 +371,9 @@ local function cuffPed(ped, cuffType, slot)
     local player = GetPlayerServerId(NetworkGetPlayerIndexFromPed(ped))
 
     if agressive then
-        agressiveCuffPlayer(cache.ped, ped, player, cuffType, slot)
+        agressiveCuffPlayer(cache.ped, ped, player, cuffType)
     else
-        normalCuffPlayer(cache.ped, ped, player, cuffType, slot)
+        normalCuffPlayer(cache.ped, ped, player, cuffType)
     end
 end
 
@@ -443,22 +443,22 @@ AddEventHandler("ND_Police:unziptie", function()
     uncuffPed(targetPed, "zipties")
 end)
 
-exports("ziptie", function(data, slot)
+exports("ziptie", function(data)
     if cache.vehicle then return end
     local targetPed = getTargetPed()
-    cuffPed(targetPed, "zipties", slot)
+    cuffPed(targetPed, "zipties")
 end)
 
-exports("uncuff", function(data, slot)
+exports("uncuff", function(data)
     if cache.vehicle then return end
     local targetPed = getTargetPed()
     uncuffPed(targetPed, "cuffs")
 end)
 
-exports("cuff", function(data, slot)
+exports("cuff", function(data)
     if cache.vehicle then return end
     local targetPed = getTargetPed()
-    cuffPed(targetPed, "cuffs", slot)
+    cuffPed(targetPed, "cuffs")
 end)
 
 lib.addKeybind({
@@ -490,7 +490,6 @@ exports.ox_target:addGlobalPlayer({
         icon = "fas fa-handcuffs",
         label = "Cuff player",
         distance = 1.5,
-        items = "cuffs",
         canInteract = function(entity)
             return canCuffPed(entity, "cuffs") and not IsPedCuffed(entity)
         end,
@@ -504,7 +503,6 @@ exports.ox_target:addGlobalPlayer({
         icon = "fas fa-handcuffs",
         label = "Ziptie player",
         distance = 1.5,
-        items = "zipties",
         canInteract = function(entity)
             return canCuffPed(entity, "zipties") and not IsPedCuffed(entity)
         end,
@@ -518,7 +516,6 @@ exports.ox_target:addGlobalPlayer({
         icon = "fas fa-handcuffs",
         label = "Remove handcuffs",
         distance = 1.5,
-        items = "handcuffkey",
         canInteract = function(entity)
             return IsPedCuffed(entity) and Player(GetPlayerServerId(NetworkGetPlayerIndexFromPed(entity))).state.cuffType == "cuffs"
         end,
@@ -531,7 +528,6 @@ exports.ox_target:addGlobalPlayer({
         icon = "fas fa-handcuffs",
         label = "Remove zipties",
         distance = 1.5,
-        items = "tools",
         canInteract = function(entity)
             return IsPedCuffed(entity) and Player(GetPlayerServerId(NetworkGetPlayerIndexFromPed(entity))).state.cuffType == "zipties"
         end,

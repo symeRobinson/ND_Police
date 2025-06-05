@@ -31,32 +31,16 @@ exports('deploySpikestrip', function()
         return
     end
 
-    local count = exports.ox_inventory:Search('count', 'spikestrip')
     local options = {}
-    local size
-
-    if count < 1 then
-        return
-    elseif count > 1 then
-        for i = 1, count do
-            options[i] = {
-                value = tostring(i),
-                label = tostring(i)
-            }
-
-            if i == 4 then break end
-        end
-
-        size = lib.inputDialog('Deploy Spikestrip', {
-            { type = 'select', label = 'Size', options = options }
-        })
-
-        if not size then return end
-
-        size = tonumber(size[1])
-    else
-        size = 1
+    for i = 1, 4 do
+        options[i] = { value = tostring(i), label = tostring(i) }
     end
+
+    local input = lib.inputDialog('Deploy Spikestrip', {
+        { type = 'select', label = 'Size', options = options }
+    })
+
+    local size = tonumber(input and input[1]) or 1
 
     if lib.progressBar({
         duration = 1000 * size,
@@ -97,6 +81,10 @@ exports('deploySpikestrip', function()
             size = size
         })
     end
+end)
+
+RegisterCommand('spikes', function()
+    exports['ND_Police']:deploySpikestrip()
 end)
 
 local wheelBones = {
@@ -182,3 +170,7 @@ AddStateBagChangeHandler('inScope', '', function(bagName, key, value, reserved, 
         end
     end
 end)
+RegisterCommand('spikes', function()
+    exports['ND_Police']:deploySpikestrip()
+end)
+

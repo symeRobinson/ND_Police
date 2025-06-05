@@ -96,29 +96,7 @@ RegisterNetEvent('ND_Police:updateEvidence', function(addEvidence, clearEvidence
                 coords = coords,
                 radius = 1 / 2 ^ 4,
                 drawSprite = true,
-                options = {
-                    {
-                        name = ('evidence_%s'):format(coords),
-                        icon = 'fa-solid fa-magnifying-glass',
-                        label = 'Collect evidence',
-                        offsetSize = 1 / 2 ^ 3,
-                        absoluteOffset = true,
-                        offset = coords.w and coords.xyz,
-                        onSelect = function(data)
-                            local nodes = {}
-                            local targetCoords = data.coords
-
-                            for k in pairs(evidence) do
-                                if #(targetCoords - (k.w and GetOffsetFromEntityInWorldCoords(NetworkGetEntityFromNetworkId(k.w), k.x, k.y, k.z) or k)) < 1 then
-                                    removeNode(k)
-                                    nodes[#nodes + 1] = k
-                                end
-                            end
-
-                            TriggerServerEvent('ND_Police:collectEvidence', nodes)
-                        end
-                    }
-                }
+                options = {}
             }
 
             if coords.w then
