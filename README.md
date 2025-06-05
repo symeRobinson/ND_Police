@@ -50,7 +50,7 @@ If you want to PR a feature, you should ask first (so you won't waste time).
 * Cuffs can be used when hands are not up, zipties require player to have hands up.
 * Front & back cuff/ziptie animations for normal cuffing.
 * Aggressive cuffing will prompt the target player with a minigame; if they complete it, they cancel the cuffing animation and can run away.
-* Uncuffing requires `handcuffkey` items, and cutting zipties requires `tools` items, which is also used for hot-wiring in NDCore.
+* Uncuffing and cutting zipties can be done directly through the third eye without any items.
 
 **Escort/drag:**
 * Players can only be dragged when cuffed/ziptied.
@@ -88,8 +88,7 @@ If you want to PR a feature, you should ask first (so you won't waste time).
 **Spike strips:**
 * Animations for spike strips.
 * Animation for player deploying.
-* If the player has one spike strip item, it will be deployed.
-* If the player has more than one spike strip item, then a menu will pop up asking how many they wish to use.
+* Use the `/spikes` command to deploy spike strips and select the desired size.
 
 **Impound:**
 * Police can impound any vehicle, and it will be deleted.

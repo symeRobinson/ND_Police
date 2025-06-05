@@ -1,13 +1,7 @@
-Ox_inventory = exports.ox_inventory
 local glm = require 'glm'
 local config = lib.load("data.config")
 
 RegisterServerEvent('ND_Police:deploySpikestrip', function(data)
-    local count = Ox_inventory:Search(source, 'count', 'spikestrip')
-
-    if count < data.size then return end
-
-    Ox_inventory:RemoveItem(source, 'spikestrip', data.size)
 
     local dir = glm.direction(data.segment[1], data.segment[2])
 
@@ -36,11 +30,7 @@ RegisterServerEvent('ND_Police:retrieveSpikestrip', function(netId)
 
     if #(pedPos - spikePos) > 5 then return end
 
-    if not Ox_inventory:CanCarryItem(source, 'spikestrip', 1) then return end
-
     DeleteEntity(spike)
-
-    Ox_inventory:AddItem(source, 'spikestrip', 1)
 end)
 
 RegisterServerEvent('ND_Police:setPlayerEscort', function(target, state, setIntoVeh, setIntoSeat)

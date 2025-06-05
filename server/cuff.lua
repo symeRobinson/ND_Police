@@ -1,8 +1,5 @@
 local cuffItems = {"cuffs", "zipties"}
-local uncuffItems = {
-    ["cuffs"] = "handcuffkey",
-    ["zipties"] = "tools"
-}
+
 
 local function cuffCheck(src, target, cuffType)
     local ped = GetPlayerPed(src)
@@ -10,9 +7,7 @@ local function cuffCheck(src, target, cuffType)
     if GetVehiclePedIsIn(ped) ~= 0 or
         GetVehiclePedIsIn(targetPed) ~= 0 or
         #(GetEntityCoords(ped)-GetEntityCoords(targetPed)) > 5.0 or
-        not lib.table.contains(cuffItems, cuffType) or
-        Ox_inventory:GetItemCount(src, cuffType) == 0
-        then return
+        not lib.table.contains(cuffItems, cuffType) then return
     end
 
     local playerState = Player(src).state
@@ -31,13 +26,10 @@ end
 local function uncuffCheck(src, target, cuffType)
     local ped = GetPlayerPed(src)
     local targetPed = GetPlayerPed(target)
-    
+
     if GetVehiclePedIsIn(ped) ~= 0 or
         GetVehiclePedIsIn(targetPed) ~= 0 or
-        #(GetEntityCoords(ped)-GetEntityCoords(targetPed)) > 5.0 or
-        not uncuffItems[cuffType] or
-        Ox_inventory:GetItemCount(src, uncuffItems[cuffType]) == 0
-        then return
+        #(GetEntityCoords(ped)-GetEntityCoords(targetPed)) > 5.0 then return
     end
 
     local playerState = Player(src).state
@@ -49,7 +41,7 @@ local function uncuffCheck(src, target, cuffType)
         targetState.isCuffed
 end
 
-RegisterNetEvent("ND_Police:syncAgressiveCuff", function(target, angle, cuffType, slot, heading)
+RegisterNetEvent("ND_Police:syncAgressiveCuff", function(target, angle, cuffType, heading)
     local src = source
     if not cuffCheck(src, target, cuffType) then return end
 
@@ -57,12 +49,11 @@ RegisterNetEvent("ND_Police:syncAgressiveCuff", function(target, angle, cuffType
     if escaped then return end
 
     Player(target).state.handsUp = false
-    Ox_inventory:RemoveItem(src, cuffType, 1, nil, slot)
 end)
 
-RegisterNetEvent("ND_Police:syncNormalCuff", function(target, angle, cuffType, slot)
+RegisterNetEvent("ND_Police:syncNormalCuff", function(target, angle, cuffType)
     local src = source
-    if not cuffCheck(src, target, cuffType) or not Ox_inventory:RemoveItem(src, cuffType, 1, nil, slot) then return end
+    if not cuffCheck(src, target, cuffType) then return end
     TriggerClientEvent("ND_Police:syncNormalCuff", target, angle, cuffType)
 end)
 
@@ -74,6 +65,4 @@ RegisterNetEvent("ND_Police:uncuffPed", function(target, cuffType)
     if playerCuffType ~= cuffType then return end
 
     TriggerClientEvent("ND_Police:uncuffPed", target)
-    Wait(500)
-    Ox_inventory:AddItem(src, cuffType, 1)
 end)
